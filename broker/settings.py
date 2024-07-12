@@ -133,3 +133,21 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Broker",
+    "DESCRIPTION": "Broker",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+    },
+    "SECURITY": [
+        {"apiKeyAuth": {"type": "apiKey", "in": "header", "name": "Authorization"}}
+    ],
+    "SECURITY_DEFINITIONS": {
+        "apiKeyAuth": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+}

@@ -1,0 +1,6 @@
+tags:
+  - "Banks"
+summary: "Bank"
+description: "Bank data"
+security:
+  - Bearer: []
