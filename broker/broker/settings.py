@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    #Third party apps
+    # Apps
+    "commons",
+    # Third party apps
     "rest_framework",
-    "drf_spectacular"
+    "drf_spectacular",
 ]
 
 REST_FRAMEWORK = {
