@@ -12,6 +12,12 @@ class BankViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     @extend_schema_from_yaml(
+        abspath("apps/commons/swagger/banks/list.yml"),
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema_from_yaml(
         abspath("apps/commons/swagger/banks/get.yml"),
     )
     def retrieve(self, request, *args, **kwargs):
