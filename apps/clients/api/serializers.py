@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.clients.api.validators import UserValidator
 from apps.clients.models import InvestorBankAccount, User, InvestorProfile
+from apps.clients.services import UserService
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,12 +23,11 @@ class UserSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data: dict) -> User:
-        password = validated_data.pop("password1")
-        validated_data.pop("password2")
-
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
+        user = UserService.create_user(
+            validated_data["username"],
+            validated_data["email"],
+            validated_data["password1"],
+        )
 
         return user
 
