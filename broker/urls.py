@@ -46,6 +46,7 @@ urlpatterns = [
         "api/",
         include(
             [
+                path("clients/", include("apps.clients.api.urls")),
                 path("commons/", include("apps.commons.api.urls")),
             ]
         ),

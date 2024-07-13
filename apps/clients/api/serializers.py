@@ -37,7 +37,7 @@ class InvestorProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InvestorProfile
-        fields = ["user", "birth_date", "address", "amount"]
+        fields = ["user", "birth_date", "address"]
 
     def create(self, validated_data) -> InvestorProfile:
         user_data = validated_data.pop("user")
