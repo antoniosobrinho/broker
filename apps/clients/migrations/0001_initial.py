@@ -172,7 +172,7 @@ class Migration(migrations.Migration):
                     "bank_account",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
-                        to="client.investorbankaccount",
+                        to="clients.investorbankaccount",
                     ),
                 ),
             ],
@@ -216,7 +216,8 @@ class Migration(migrations.Migration):
             model_name="investorbankaccount",
             name="investor",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="client.investorprofile"
+                on_delete=django.db.models.deletion.CASCADE,
+                to="clients.investorprofile",
             ),
         ),
         migrations.AlterUniqueTogether(

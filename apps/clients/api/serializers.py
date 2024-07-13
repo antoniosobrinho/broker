@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from apps.client.api.validators import UserValidator
-from apps.client.models import User, InvestorProfile
+from apps.clients.api.validators import UserValidator
+from apps.clients.models import User, InvestorProfile
 
 
 class UserSerializer(serializers.ModelSerializer):

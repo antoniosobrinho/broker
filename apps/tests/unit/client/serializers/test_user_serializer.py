@@ -1,6 +1,6 @@
 from unittest.mock import Mock, patch
 from django.test import TestCase
-from apps.client.api.serializers import UserSerializer
+from apps.clients.api.serializers import UserSerializer
 
 
 class UserSerializerTest(TestCase):
@@ -12,7 +12,7 @@ class UserSerializerTest(TestCase):
             "password2": "password123",
         }
 
-    @patch("apps.client.api.validators.UserValidator.validate_passwords")
+    @patch("apps.clients.api.validators.UserValidator.validate_passwords")
     def test_validate_passwords_called(self, mock_validate_passwords):
         serializer = UserSerializer(data=self.data)
 
@@ -56,7 +56,7 @@ class UserSerializerTest(TestCase):
         self.assertFalse(serializer.is_valid())
         self.assertEqual(serializer.errors["password2"][0], "This field is required.")
 
-    @patch("apps.client.api.serializers.User")
+    @patch("apps.clients.api.serializers.User")
     def test_create_user(self, mock_user):
         set_password = Mock()
 

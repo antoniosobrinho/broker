@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Apps
     "apps.tests",
-    "apps.client",
+    "apps.clients",
     "apps.commons",
     # Third party apps
     "rest_framework",
@@ -98,7 +98,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "client.User"
+AUTH_USER_MODEL = "clients.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

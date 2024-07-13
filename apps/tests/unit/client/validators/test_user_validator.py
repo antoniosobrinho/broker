@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework.serializers import ValidationError
-from apps.client.api.validators import UserValidator
+from apps.clients.api.validators import UserValidator
 
 
 class UserValidatorTest(TestCase):
