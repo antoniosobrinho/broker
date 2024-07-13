@@ -1,7 +1,11 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from apps.commons.models import Bank, BaseModel
+
+
+class User(AbstractUser, BaseModel):
+    email = models.EmailField(unique=True)
 
 
 class InvestorProfile(BaseModel):

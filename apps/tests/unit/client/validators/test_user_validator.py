@@ -9,7 +9,7 @@ class UserValidatorTest(TestCase):
         password1 = "password123"
         password2 = "password123"
         try:
-            UserValidator.validate_passwords(password1, password2)
+            UserValidator().validate_passwords(password1, password2)
         except ValidationError:
             self.fail("validate_passwords() raised ValidationError unexpectedly!")
 
@@ -17,4 +17,4 @@ class UserValidatorTest(TestCase):
         password1 = "password123"
         password2 = "differentpassword"
         with self.assertRaises(ValidationError):
-            UserValidator.validate_passwords(password1, password2)
+            UserValidator().validate_passwords(password1, password2)

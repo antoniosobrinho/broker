@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.contrib.auth.models import User
+from apps.client.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from apps.commons.models import Bank
 
@@ -15,6 +15,8 @@ class BankViewSetTest(APITestCase):
         )
 
         # Create some Bank instances
+        Bank.objects.all().delete()
+
         self.bank1 = Bank.objects.create(name="Bank One")
         self.bank2 = Bank.objects.create(
             name="Bank Two",
