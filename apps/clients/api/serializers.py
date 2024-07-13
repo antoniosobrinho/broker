@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.clients.api.validators import UserValidator
-from apps.clients.models import User, InvestorProfile
+from apps.clients.models import InvestorBankAccount, User, InvestorProfile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,3 +46,11 @@ class InvestorProfileSerializer(serializers.ModelSerializer):
         investor_profile = InvestorProfile.objects.create(user=user, **validated_data)
 
         return investor_profile
+
+
+class InvestorBankAccountSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InvestorBankAccount
+        fields = ["investor", "bank", "account_number"]
+        extra_kwargs = {"investor": {"write_only": True}}
