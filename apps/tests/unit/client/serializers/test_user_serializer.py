@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from django.test import TestCase
 from apps.client.api.serializers import UserSerializer
 
@@ -55,3 +55,27 @@ class UserSerializerTest(TestCase):
         serializer = UserSerializer(data=data)
         self.assertFalse(serializer.is_valid())
         self.assertEqual(serializer.errors["password2"][0], "This field is required.")
+
+    @patch("apps.client.api.serializers.User")
+    def test_create_user(self, mock_user):
+        set_password = Mock()
+
+        save = Mock()
+
+        user_obj = Mock()
+        user_obj.set_password = set_password
+        user_obj.save = save
+
+        mock_user.return_value = user_obj
+
+        serializer = UserSerializer(data=self.data)
+
+        user = serializer.create(self.data)
+
+        mock_user.assert_called_once_with(
+            **{"username": "testuser", "email": "testuser@example.com"}
+        )
+        set_password.assert_called_once_with("password123")
+        save.assert_called_once_with()
+
+        self.assertEqual(user, user_obj)
