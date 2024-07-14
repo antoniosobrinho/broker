@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "apps.tests",
     "apps.clients",
     "apps.commons",
+    "apps.investments",
     # Third party apps
     "rest_framework",
     "drf_spectacular",

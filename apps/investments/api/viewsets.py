@@ -1,14 +1,15 @@
 from posixpath import abspath
-from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, viewsets, views, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from apps.clients.api.permissions import HasInvestorProfile
+from apps.investments.api.serializers import InvestorCurrencySerializer
+from apps.investments.repositories import InvestorCurrencyRepository
 from apps.investments.services import CurrencyService
 from broker.swagger import extend_schema_from_yaml
 
 
-class CurrenciesView(APIView):
+class CurrenciesView(views.APIView):
     permission_classes = [IsAuthenticated, HasInvestorProfile]
 
     @extend_schema_from_yaml(
@@ -23,3 +24,15 @@ class CurrenciesView(APIView):
                 {"message": "Try again latter"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class InvestorCurrencyViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = InvestorCurrencySerializer
+
+    permission_classes = [IsAuthenticated, HasInvestorProfile]
+
+    def get_queryset(self):
+        queryset = InvestorCurrencyRepository.get_by_investor(
+            self.request.user.investorprofile
+        )
+        return queryset

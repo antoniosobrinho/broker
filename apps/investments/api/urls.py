@@ -1,10 +1,13 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from apps.investments.api.viewsets import CurrenciesView
+from apps.investments.api.viewsets import CurrenciesView, InvestorCurrencyViewSet
 
 
 router = DefaultRouter()
+router.register(
+    r"investor_currencies", InvestorCurrencyViewSet, basename="investor_currencies"
+)
 
 urlpatterns = [
     re_path(r"^", include(router.urls)),
