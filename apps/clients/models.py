@@ -27,6 +27,6 @@ class InvestorBankAccount(BaseModel):
         return self.investor.user.username + self.bank.name
 
 
-class BankTransition(BaseModel):
+class BankTransaction(BaseModel):
     amount = models.DecimalField(decimal_places=2, max_digits=500)
     bank_account = models.ForeignKey(InvestorBankAccount, on_delete=models.PROTECT)

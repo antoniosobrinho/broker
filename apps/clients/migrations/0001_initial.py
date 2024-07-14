@@ -154,7 +154,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="BankTransition",
+            name="BankTransaction",
             fields=[
                 (
                     "id",
