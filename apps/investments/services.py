@@ -1,12 +1,13 @@
 from decimal import Decimal
-from typing import Dict
+from typing import Dict, List
 import requests
 from django.conf import settings
 from django.db import transaction
 
 from apps.clients.models import InvestorProfile
 from apps.clients.services import InvestorProfileService
-from apps.investments.models import InvestorTradeCurrency
+from apps.investments.dataclasses import PerformanceDataClass
+from apps.investments.models import InvestorCurrency, InvestorTradeCurrency
 from apps.investments.repositories import (
     InvestorCurrencyRepository,
     InvestorTradeCurrencyRepository,
@@ -15,7 +16,7 @@ from apps.investments.repositories import (
 
 class CurrencyService:
     @staticmethod
-    def get_currency_values() -> Dict[str, float]:
+    def get_currencies_values() -> Dict[str, float]:
         url = settings.EXCHANGERATESAPI_HOST
 
         params = {"access_key": settings.EXCHANGERATESAPI_KEY}
@@ -84,3 +85,48 @@ class InvestorTradeCurrencyService:
         )
 
         return trade
+
+
+class InvestorCurrencyService:
+    @staticmethod
+    def get_performance(investor: InvestorProfile) -> List[PerformanceDataClass]:
+        try:
+            currencies = CurrencyService.get_currencies_values()
+        except:
+            raise Exception
+
+        investor_currencies = InvestorCurrencyRepository.get_by_investor(investor)
+
+        performances = list()
+
+        for investor_currency in investor_currencies:
+            currency_value = currencies[investor_currency.currency]
+            performances.append(
+                InvestorCurrencyService.calculate_gain(
+                    investor_currency, Decimal(currency_value)
+                )
+            )
+
+        return performances
+
+    @staticmethod
+    def calculate_gain(
+        investor_currency: InvestorCurrency, currency_value: Decimal
+    ) -> PerformanceDataClass:
+        pct_gain = (currency_value / investor_currency.mean_value) - 1
+
+        total_spend = investor_currency.mean_value * investor_currency.quantity
+
+        money_gain = total_spend * pct_gain
+
+        current_money = total_spend + money_gain
+
+        pct_gain *= 100
+
+        return PerformanceDataClass(
+            currency=investor_currency.currency,
+            total_spend=total_spend,
+            money_gain_loss=money_gain,
+            current_money=current_money,
+            pct=pct_gain,
+        )

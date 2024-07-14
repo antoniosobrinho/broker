@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from posixpath import abspath
 from rest_framework import status, viewsets, views, mixins
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +9,7 @@ from apps.investments.api.serializers import (
     InvestorTradeCurrencySerializer,
 )
 from apps.investments.repositories import InvestorCurrencyRepository
-from apps.investments.services import CurrencyService
+from apps.investments.services import CurrencyService, InvestorCurrencyService
 from broker.swagger import extend_schema_from_yaml
 
 
@@ -20,7 +21,7 @@ class CurrenciesView(views.APIView):
     )
     def get(self, request, *args, **kwargs):
         try:
-            currencies = CurrencyService.get_currency_values()
+            currencies = CurrencyService.get_currencies_values()
             return Response(currencies, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
@@ -51,7 +52,7 @@ class InvestorTradeCurrencyViewSet(
         context = super().get_serializer_context()
 
         if self.request.method == "POST":
-            context["currencies"] = CurrencyService.get_currency_values()
+            context["currencies"] = CurrencyService.get_currencies_values()
 
         return context
 
@@ -70,3 +71,23 @@ class InvestorTradeCurrencyViewSet(
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+
+
+class PerformancesView(views.APIView):
+    permission_classes = [IsAuthenticated, HasInvestorProfile]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            performances = InvestorCurrencyService.get_performance(
+                request.user.investorprofile
+            )
+            performances_list = list()
+            for performance in performances:
+                performances_list.append(asdict(performance))
+
+            return Response(performances_list, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"message": "Try again latter"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

@@ -5,6 +5,7 @@ from apps.investments.api.viewsets import (
     CurrenciesView,
     InvestorCurrencyViewSet,
     InvestorTradeCurrencyViewSet,
+    PerformancesView,
 )
 
 
@@ -15,8 +16,8 @@ router.register(
 router.register(
     r"trade_currencies", InvestorTradeCurrencyViewSet, basename="trade_currencies"
 )
-
 urlpatterns = [
     re_path(r"^", include(router.urls)),
     path("currencies/", CurrenciesView.as_view(), name="currencies"),
+    path("performances/", PerformancesView.as_view(), name="performances"),
 ]
