@@ -1,0 +1,14 @@
+tags:
+  - "Currencies"
+summary: "Currencies values"
+description: "Currencies values"
+responses:
+  "200":
+    description: "Cur"
+    type: object
+    additionalProperties:
+      type: number
+      format: float
+    example: "{AED: 4.01113, AFN: 77.123673,}"
+  "500":
+    description: "Fail to get currencies values"
