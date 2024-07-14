@@ -48,6 +48,7 @@ urlpatterns = [
             [
                 path("clients/", include("apps.clients.api.urls")),
                 path("commons/", include("apps.commons.api.urls")),
+                path("investments/", include("apps.investments.api.urls")),
             ]
         ),
     ),

@@ -164,3 +164,7 @@ SPECTACULAR_SETTINGS = {
         "apiKeyAuth": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
 }
+
+EXCHANGERATESAPI_KEY = "d0a3000d8b47fe36b5612906e02414fb"
+
+EXCHANGERATESAPI_HOST = "http://api.exchangeratesapi.io/v1/latest"
