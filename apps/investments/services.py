@@ -7,7 +7,10 @@ from django.db import transaction
 from apps.clients.models import InvestorProfile
 from apps.clients.services import InvestorProfileService
 from apps.investments.models import InvestorTradeCurrency
-from apps.investments.repositories import InvestorTradeCurrencyRepository
+from apps.investments.repositories import (
+    InvestorCurrencyRepository,
+    InvestorTradeCurrencyRepository,
+)
 
 
 class CurrencyService:
@@ -35,6 +38,25 @@ class InvestorTradeCurrencyService:
         trade = InvestorTradeCurrencyRepository.create(
             currency, investor, currency_value, quantity
         )
+
+        investor_currency = InvestorCurrencyRepository.get_investor_currency(
+            investor, currency
+        )
+
+        if investor_currency:
+            total_value = (
+                investor_currency.quantity * investor_currency.mean_value
+            ) + (quantity * currency_value)
+            total_quantity = investor_currency.quantity + quantity
+            mean_value = total_value / total_quantity
+
+            investor_currency.quantity += quantity
+            investor_currency.mean_value = mean_value
+            investor_currency.save()
+        else:
+            InvestorCurrencyRepository.create(
+                currency, investor, currency_value, quantity
+            )
 
         total = quantity * currency_value * -1
 

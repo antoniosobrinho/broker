@@ -1,3 +1,4 @@
+from decimal import Decimal
 from rest_framework import serializers
 
 from apps.investments.api.validators import InvestorTradeCurrencyValidator
@@ -44,7 +45,7 @@ class InvestorTradeCurrencySerializer(serializers.ModelSerializer):
 
         if quantity > 0:
             trade = InvestorTradeCurrencyService.buy_currency(
-                currency, currency_value, investor, quantity
+                currency, Decimal(currency_value), investor, quantity
             )
 
         return trade

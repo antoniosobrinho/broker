@@ -20,6 +20,17 @@ class InvestorCurrencyRepository:
             return currency
         return None
 
+    @staticmethod
+    def create(
+        currency: str, investor: InvestorProfile, mean_value: Decimal, quantity: int
+    ) -> InvestorCurrency:
+        investor_currency = InvestorCurrency.objects.create(
+            currency=currency,
+            investor=investor,
+            mean_value=mean_value,
+            quantity=quantity,
+        )
+
 
 class InvestorTradeCurrencyRepository:
     @staticmethod
@@ -32,6 +43,5 @@ class InvestorTradeCurrencyRepository:
             unit_value=unit_value,
             quantity=quantity,
         )
-        trade.save()
 
         return trade
