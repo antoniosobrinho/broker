@@ -3,7 +3,10 @@ from rest_framework import status, viewsets, views, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from apps.clients.api.permissions import HasInvestorProfile
-from apps.investments.api.serializers import InvestorCurrencySerializer
+from apps.investments.api.serializers import (
+    InvestorCurrencySerializer,
+    InvestorTradeCurrencySerializer,
+)
 from apps.investments.repositories import InvestorCurrencyRepository
 from apps.investments.services import CurrencyService
 from broker.swagger import extend_schema_from_yaml
@@ -36,3 +39,34 @@ class InvestorCurrencyViewSet(viewsets.ReadOnlyModelViewSet):
             self.request.user.investorprofile
         )
         return queryset
+
+
+class InvestorTradeCurrencyViewSet(
+    mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet
+):
+    serializer_class = InvestorTradeCurrencySerializer
+    permission_classes = [IsAuthenticated, HasInvestorProfile]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+
+        if self.request.method == "POST":
+            context["currencies"] = CurrencyService.get_currency_values()
+
+        return context
+
+    def create(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+        except:
+            return Response(
+                {"message": "Try again latter"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )

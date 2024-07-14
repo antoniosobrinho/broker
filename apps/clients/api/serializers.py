@@ -8,7 +8,6 @@ from apps.clients.models import (
 )
 from apps.clients.services import (
     BankTransactionService,
-    InvestorProfileService,
     UserService,
 )
 from django.db import transaction

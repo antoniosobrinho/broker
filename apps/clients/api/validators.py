@@ -26,7 +26,7 @@ class BankTransactionValidator:
         self, investor: InvestorProfile, amount: Decimal
     ) -> None:
         zero = Decimal("0.00")
-        if amount < zero and investor.amount < amount:
+        if amount < zero and investor.amount < (amount * -1):
             raise serializers.ValidationError(
                 "The customer does not have enough funds to withdraw."
             )
