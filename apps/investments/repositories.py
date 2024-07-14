@@ -17,7 +17,7 @@ class InvestorCurrencyRepository:
     ) -> Optional[InvestorCurrency]:
         currency = InvestorCurrency.objects.filter(investor=investor, currency=currency)
         if currency:
-            return currency
+            return currency[0]
         return None
 
     @staticmethod

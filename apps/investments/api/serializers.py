@@ -9,14 +9,14 @@ from apps.investments.services import InvestorTradeCurrencyService
 class InvestorCurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorCurrency
-        fields = ["currency", "mean_value"]
+        fields = ["id", "currency", "mean_value"]
         read_only_fields = ["mean_value"]
 
 
 class InvestorTradeCurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorTradeCurrency
-        fields = ["currency", "unit_value", "quantity"]
+        fields = ["id", "currency", "unit_value", "quantity"]
         read_only_fields = ["unit_value"]
 
     def validate(self, attrs):
@@ -47,5 +47,8 @@ class InvestorTradeCurrencySerializer(serializers.ModelSerializer):
             trade = InvestorTradeCurrencyService.buy_currency(
                 currency, Decimal(currency_value), investor, quantity
             )
-
+        else:
+            trade = InvestorTradeCurrencyService.sell_currency(
+                currency, Decimal(currency_value), investor, quantity * -1
+            )
         return trade

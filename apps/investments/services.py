@@ -58,8 +58,29 @@ class InvestorTradeCurrencyService:
                 currency, investor, currency_value, quantity
             )
 
-        total = quantity * currency_value * -1
+        amount_spent = quantity * currency_value * -1
 
-        InvestorProfileService.sum_amount(investor, Decimal(total))
+        InvestorProfileService.sum_amount(investor, Decimal(amount_spent))
+
+        return trade
+
+    @staticmethod
+    @transaction.atomic
+    def sell_currency(
+        currency: str, currency_value: Decimal, investor: InvestorProfile, quantity: int
+    ) -> InvestorTradeCurrency:
+        investor_currency = InvestorCurrencyRepository.get_investor_currency(
+            investor, currency
+        )
+        investor_currency.quantity -= quantity
+        investor_currency.save()
+
+        amount_won = currency_value * quantity
+
+        InvestorProfileService.sum_amount(investor, Decimal(amount_won))
+
+        trade = InvestorTradeCurrencyRepository.create(
+            currency, investor, currency_value, (quantity * -1)
+        )
 
         return trade
